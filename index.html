@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet"></script>
+</head>
+<body>
+
+    <!-- Elemento de video para mostrar el flujo -->
+    <!-- Se añade "playsinline" para reproducir el video inline en dispositivos móviles -->
+    <video id="videoElement" width="640" height="480" autoplay muted playsinline></video>
+
+    <!-- Contenedor para mostrar resultados del modelo Mobilenet -->
+    <div id="resultContainer"></div>
+
+    <script>
+        // Solicitar acceso a la cámara trasera
+        navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { exact: "environment" } }
+        })
+        .then(function(stream) {
+            const video = document.getElementById("videoElement");
+            video.srcObject = stream;
+            video.play();
+        })
+        .catch(function(err) {
+            console.error("Error al acceder a la cámara: ", err);
+        });
+    </script>
+
+</body>
+</html>
