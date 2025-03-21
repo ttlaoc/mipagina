@@ -13,7 +13,7 @@
     <!-- Se añade "playsinline" para reproducir el video inline en dispositivos móviles -->
     <video id="videoElement" width="640" height="480" autoplay muted playsinline></video>
 
-    <!-- Contenedor para mostrar resultados del modelo Mobilenet -->
+    <!-- Contenedor para mostrar resultados del modelo MobileNet -->
     <div id="resultContainer"></div>
 
     <script>
@@ -24,7 +24,17 @@
         .then(function(stream) {
             const video = document.getElementById("videoElement");
             video.srcObject = stream;
-            video.play();
+            video.onloadeddata = async function() {
+                video.play();
+                // Cargar el modelo MobileNet a través de TensorFlow.js
+                const model = await mobilenet.load();
+                console.log("Modelo MobileNet cargado");
+                // Clasificar el contenido del video cada segundo
+                setInterval(async () => {
+                    const predictions = await model.classify(video);
+                    document.getElementById("resultContainer").innerText = JSON.stringify(predictions, null, 2);
+                }, 1000);
+            };
         })
         .catch(function(err) {
             console.error("Error al acceder a la cámara: ", err);
